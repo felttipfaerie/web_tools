@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>True Color ⇄ HEX ⇄ CMYK Converter</title>
+  <style>
+    :root {
+      --bg: #020202;
+      --panel: #020202;
+      --white: #ffffff;
+      --muted: #C0C0C0;
+      --accent: #7c9cff;
+      --accent-2: #7ff0c6;
+      --danger: #ff6b6b;
+      --ok: #4ade80;
+      --border: #C0C0C0;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 5px;
+      --pink: #F85CC4;
+      --blue: #72FFFF;
+      --round: 999px;
+    }
+
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--white);
+      line-height: 1.35;
+      font-family: "Montserrat", sans-serif;
+    }
+    .wrap { max-width: 1100px; margin: 40px auto; padding: 20px }
+    header { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 16px }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0; font-weight: 800; letter-spacing: .2px }
+    .tagline { color: var(--muted); font-size: 14px }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(12, 1fr) }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; }
+    .card h2 { margin: 0 0 8px; font-size: 18px }
+    .card p.small { margin: 6px 0 0; color: var(--muted); font-size: 13px }
+    .span-6 { grid-column: span 6 }
+    .span-12 { grid-column: span 12 }
+    @media (max-width: 900px){ .span-6 { grid-column: span 12 } }
+    label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 10px 0 6px }
+    input[type="number"], select { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--white); padding: 12px 12px; border-radius: var(--radius); outline: none; box-shadow: inset 0 0 0 1px transparent; transition: box-shadow .2s ease, border-color .2s ease; font-size: 14px; }
+    input[type="number"]:focus, select:focus { box-shadow: 0 0 0 3px var(--white); border-color: var(--white) }
+
+    /* Compact HEX box */
+    input.hex-box {
+      display: inline-block;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      width: auto;
+      min-width: 100px;
+    }
+    input.hex-box:focus { outline: none; box-shadow: 0 0 0 3px var(--white); border-color: var(--white); }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px }
+    .row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap }
+    .btn { background: var(--blue); color: var(--bg); border: 1px solid var(--white); border-radius: 14px; padding: 10px 14px; font-weight: 700; cursor: pointer }
+    .btn.secondary { background: var(--bg); color: var(--white); border: 1px solid var(--white); }
+    .footer { margin-top: 20px; color: var(--muted); font-size: 12px }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace }
+    .swatch { height: 160px; border-radius: 10px; border: 1px solid var(--border); display:flex; align-items:center; justify-content:center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>True Color ⇄ HEX ⇄ CMYK</h1>
+        <div class="tagline">Enter any one format — the others update instantly. Styled to match your DPI/DPMM tool.</div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="resetBtn" title="Reset all fields">Reset</button>
+        <button class="btn secondary" id="copyLinkBtn" title="Copy a sharable URL with your current inputs">Share State</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Row 1: RGB + CMYK -->
+      <section class="card span-6">
+        <h2>AutoCAD True Color (0–255)</h2>
+        <div class="row-3">
+          <div>
+            <label for="r">Red</label>
+            <input id="r" type="number" min="0" max="255" step="1" value="248" />
+          </div>
+          <div>
+            <label for="g">Green</label>
+            <input id="g" type="number" min="0" max="255" step="1" value="92" />
+          </div>
+          <div>
+            <label for="b">Blue</label>
+            <input id="b" type="number" min="0" max="255" step="1" value="196" />
+          </div>
+        </div>
+        <p class="small">Same RGB channels used by AutoCAD "True Color".</p>
+      </section>
+
+      <section class="card span-6">
+        <h2>CMYK (0–100)</h2>
+        <div class="row-4">
+          <div>
+            <label for="c">Cyan</label>
+            <input id="c" type="number" min="0" max="100" step="0.1" value="0" />
+          </div>
+          <div>
+            <label for="m">Magenta</label>
+            <input id="m" type="number" min="0" max="100" step="0.1" value="62.9" />
+          </div>
+          <div>
+            <label for="y">Yellow</label>
+            <input id="y" type="number" min="0" max="100" step="0.1" value="20.7" />
+          </div>
+          <div>
+            <label for="k">Black (K)</label>
+            <input id="k" type="number" min="0" max="100" step="0.1" value="2.7" />
+          </div>
+        </div>
+        <p class="small">Note: CMYK is device/press dependent; values here use the standard sRGB-derived formula.</p>
+      </section>
+
+      <!-- Row 2: HEX + Preview -->
+      <section class="card span-6">
+        <h2>HEX</h2>
+        <label for="hex">#RRGGBB or #RGB</label>
+        <input id="hex" type="text" class="hex-box" placeholder="#F85CC4" value="#F85CC4" />
+        <p class="small" id="hexMsg"></p>
+      </section>
+
+      <section class="card span-6">
+        <h2>Preview</h2>
+        <div id="swatch" class="swatch" role="img" aria-label="Color preview">&nbsp;</div>
+      </section>
+    </div>
+
+    <div class="footer">Pro tip: paste any HEX (like <span class="mono">#09F</span>) or tweak a single channel — all fields sync.</div>
+  </div>
+
+  <script>
+    (function(){
+      const $ = id => document.getElementById(id);
+      const clamp = (n, min, max) => Math.min(Math.max(Number(n)||0, min), max);
+      const round1 = n => Number.isFinite(n) ? Math.round(n*10)/10 : 0;
+
+      const rEl=$('r'), gEl=$('g'), bEl=$('b');
+      const hexEl=$('hex'), hexMsg=$('hexMsg');
+      const cEl=$('c'), mEl=$('m'), yEl=$('y'), kEl=$('k');
+      const swatch=$('swatch');
+      const resetBtn=$('resetBtn'), copyLinkBtn=$('copyLinkBtn');
+
+      let syncing=false;
+
+      function rgbToHex(r,g,b){
+        return '#' + [r,g,b].map(v=>{ const h = clamp(v,0,255).toString(16).toUpperCase(); return h.length===1 ? '0'+h : h; }).join('');
+      }
+      function hexToRgb(hex){
+        if(!hex) return null; let s=(''+hex).trim();
+        if(s.startsWith('#')) s=s.slice(1);
+        if(s.length===3) s=s.split('').map(ch=>ch+ch).join('');
+        if(!/^[0-9a-fA-F]{6}$/.test(s)) return null;
+        return { r:parseInt(s.slice(0,2),16), g:parseInt(s.slice(2,4),16), b:parseInt(s.slice(4,6),16) };
+      }
+      function rgbToCmyk(r,g,b){
+        const R=r/255, G=g/255, B=b/255; const K=1-Math.max(R,G,B);
+        if(K>=1-1e-10) return {c:0,m:0,y:0,k:100};
+        const C=(1-R-K)/(1-K), M=(1-G-K)/(1-K), Y=(1-B-K)/(1-K);
+        return { c:C*100, m:M*100, y:Y*100, k:K*100 };
+      }
+      function cmykToRgb(c,m,y,k){
+        const C=c/100, M=m/100, Y=y/100, K=k/100;
+        return { r:Math.round(255*(1-C)*(1-K)), g:Math.round(255*(1-M)*(1-K)), b:Math.round(255*(1-Y)*(1-K)) };
+      }
+
+      function setRGB(r,g,b){
+        if(syncing) return; syncing=true;
+        r=clamp(r,0,255); g=clamp(g,0,255); b=clamp(b,0,255);
+        rEl.value=r; gEl.value=g; bEl.value=b;
+        const hex = rgbToHex(r,g,b).toUpperCase();
+        hexEl.value=hex; hexMsg.textContent='';
+        const {c,m,y,k}=rgbToCmyk(r,g,b);
+        cEl.value=round1(c).toFixed(1); mEl.value=round1(m).toFixed(1); yEl.value=round1(y).toFixed(1); kEl.value=round1(k).toFixed(1);
+        swatch.style.background=`rgb(${r},${g},${b})`;
+        syncing=false;
+      }
+      function setHEX(hex){ if(syncing) return; const rgb=hexToRgb(hex); if(!rgb){ hexMsg.textContent='Invalid HEX'; return;} hexMsg.textContent=''; setRGB(rgb.r,rgb.g,rgb.b); }
+      function setCMYK(c,m,y,k){ if(syncing) return; const {r,g,b}=cmykToRgb(clamp(c,0,100),clamp(m,0,100),clamp(y,0,100),clamp(k,0,100)); setRGB(r,g,b); }
+
+      [rEl,gEl,bEl].forEach(el=>el.addEventListener('input',()=>setRGB(+rEl.value,+gEl.value,+bEl.value)));
+      hexEl.addEventListener('input',()=>setHEX(hexEl.value));
+      [cEl,mEl,yEl,kEl].forEach(el=>el.addEventListener('input',()=>setCMYK(+cEl.value,+mEl.value,+yEl.value,+kEl.value)));
+
+      function shareState(){
+        const state={ r:rEl.value,g:gEl.value,b:bEl.value,hex:hexEl.value,c:cEl.value,m:mEl.value,y:yEl.value,k:kEl.value };
+        const token=btoa(JSON.stringify(state));
+        const url=location.origin+location.pathname+'#'+encodeURIComponent(token);
+        navigator.clipboard.writeText(url).then(()=>{ const old=copyLinkBtn.textContent; copyLinkBtn.textContent='Copied!'; setTimeout(()=>copyLinkBtn.textContent=old,1000); });
+      }
+      copyLinkBtn.addEventListener('click',shareState);
+
+      resetBtn.addEventListener('click',()=>setRGB(248,92,196));
+
+      setRGB(248,92,196);
+    })();
+  </script>
+</body>
+</html>
