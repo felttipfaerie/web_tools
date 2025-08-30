@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dots Per Inch to Dots Per Millimeter Calculator • Image ↔ Output Size</title>
+    <style>
+        :root {
+            --bg: #020202;
+            --panel: #020202;
+            --white: #ffffff;
+            --muted: #C0C0C0;
+            --accent: #7c9cff;
+            --accent-2: #7ff0c6;
+            --danger: #ff6b6b;
+            --ok: #4ade80;
+            --border: #C0C0C0;
+            --shadow: 0 10px 30px rgba(0,0,0,.35);
+            --radius: 5px;
+            --pink: #F85CC4;
+            --blue: #72FFFF;
+            --round: 999px;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html, body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--white);
+            line-height: 1.35;
+            font-family: "Montserrat", sans-serif;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 16px
+        }
+
+        h1 {
+            font-size: clamp(20px, 2.6vw, 28px);
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: .2px
+        }
+
+        .tagline {
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        .grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(12, 1fr)
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 18px;
+        }
+
+            .card h2 {
+                margin: 0 0 8px;
+                font-size: 18px
+            }
+
+            .card p.small {
+                margin: 6px 0 0;
+                color: var(--muted);
+                font-size: 13px
+            }
+
+        .span-4 {
+            grid-column: span 4
+        }
+
+        .span-6 {
+            grid-column: span 6
+        }
+
+        .span-8 {
+            grid-column: span 8
+        }
+
+        .span-12 {
+            grid-column: span 12
+        }
+
+        @media (max-width: 900px) {
+            .span-4, .span-6, .span-8 {
+                grid-column: span 12
+            }
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: var(--muted);
+            margin: 10px 0 6px
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--white);
+            padding: 12px 12px;
+            border-radius: var(--radius);
+            outline: none;
+            box-shadow: inset 0 0 0 1px transparent;
+            transition: box-shadow .2s ease, border-color .2s ease;
+            font-size: 14px;
+        }
+
+            input[type="number"]:focus, select:focus {
+                box-shadow: 0 0 0 3px var(--white);
+                border-color: var(--white)
+            }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        .row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px
+        }
+
+        .inline {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .switch {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--round);
+            padding: 4px;
+            display: inline-flex;
+            gap: 4px
+        }
+
+            .switch button {
+                background: transparent;
+                color: var(--muted);
+                border: none;
+                padding: 8px 12px;
+                border-radius: var(--round);
+                cursor: pointer
+            }
+
+                .switch button.active {
+                    background: var(--pink);
+                    color: var(--white)
+                }
+
+        .help {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .kpi {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+            .kpi .item {
+                background: var(--bg);
+                border: 1px solid var(--pink);
+                border-radius: 14px;
+                padding: 14px;
+                min-height: 150px;
+                flex: 1 1 220px;
+                display: flex;
+                flex-direction: column;
+            }
+
+                .kpi .item h3 {
+                    margin: 0 0 6px;
+                    font-size: 14px;
+                    color: var(--muted);
+                }
+
+                .kpi .item .val {
+                    font-size: 22px;
+                    font-weight: 800;
+                    text-align: center;
+                    margin-top: auto;
+                    margin-bottom: auto;
+                }
+
+                .kpi .item .info {
+                    margin-top: auto;
+                    font-size: 12px;
+                    color: var(--muted);
+                }
+
+        .ok {
+            color: var(--ok)
+        }
+
+        .warn {
+            color: var(--danger)
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .btn {
+            background: var(--blue);
+            color: var(--bg);
+            border: 1px solid var(--white);
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-weight: 700;
+            cursor: pointer
+        }
+
+            .btn.secondary {
+                background: var(--bg);
+                color: var(--white);
+                border: 1px solid var(--white);
+            }
+
+        .ratio {
+            font-variant-numeric: tabular-nums
+        }
+
+        details {
+            margin-top: 10px
+        }
+
+        summary {
+            cursor: pointer
+        }
+
+        .footer {
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            <div>
+                <h1>DPI to DPMM Calculator</h1>
+                <div class="tagline">Convert resolution, check print fitness, and plan output size with paper presets.</div>
+            </div>
+            <div class="actions">
+                <button class="btn" id="resetBtn" title="Reset all fields">Reset</button>
+                <button class="btn secondary" id="copyLinkBtn" title="Copy a sharable URL with your current inputs">Share State</button>
+            </div>
+        </header>
+
+        <div class="grid">
+            <!-- Image -->
+            <section class="card span-4" id="imageCard">
+                <h2>1) Image</h2>
+                <p class="small">Enter the source image pixel dimensions.</p>
+                <div class="row">
+                    <div>
+                        <label for="imgW">Width (px)</label>
+                        <input type="number" id="imgW" min="0" step="1" placeholder="e.g., 4000" />
+                    </div>
+                    <div>
+                        <label for="imgH">Height (px)</label>
+                        <input type="number" id="imgH" min="0" step="1" placeholder="e.g., 3000" />
+                    </div>
+                </div>
+                <div class="inline" style="margin-top:10px">
+                    <span class="help">Aspect ratio:</span>
+                    <span id="aspect" class="badge mono">—</span>
+                </div>
+                <details>
+                    <summary class="help">Need to work from a known size at a known PPI?</summary>
+                    <div class="row" style="margin-top:8px">
+                        <div>
+                            <label for="imgWmm">Width (mm)</label>
+                            <input type="number" id="imgWmm" min="0" step="0.01" placeholder="optional" />
+                        </div>
+                        <div>
+                            <label for="imgHmm">Height (mm)</label>
+                            <input type="number" id="imgHmm" min="0" step="0.01" placeholder="optional" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:8px">
+                        <div>
+                            <label for="imgKnownPpi">Known PPI (optional)</label>
+                            <input type="number" id="imgKnownPpi" min="1" step="1" placeholder="e.g., 300" />
+                        </div>
+                        <div class="inline" style="align-items:flex-end; gap:8px">
+                            <button class="btn secondary" id="derivePxBtn" style="margin-top:24px">Derive Pixels from mm + PPI</button>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <!-- Output -->
+            <section class="card span-4" id="outputCard">
+                <h2>2) Output Size</h2>
+                <div class="inline" style="justify-content:space-between">
+                    <div class="switch" role="tablist" aria-label="Output size mode">
+                        <button type="button" class="active" id="modePaper">Paper</button>
+                        <button type="button" id="modeManual">Manual</button>
+                    </div>
+                    <div class="inline">
+                        <span class="help">Orientation</span>
+                        <div class="switch" role="tablist" aria-label="Orientation">
+                            <button type="button" class="active" id="oriPortrait">Portrait</button>
+                            <button type="button" id="oriLandscape">Landscape</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paper mode -->
+                <div id="paperPane" style="margin-top:12px">
+                    <label for="paper">Paper size</label>
+                    <select id="paper"></select>
+                    <p class="small">Content area equals full paper size (no margins). Use Manual to set exact mm.</p>
+                </div>
+
+                <!-- Manual mode -->
+                <div id="manualPane" style="display:none; margin-top:12px">
+                    <div class="row">
+                        <div>
+                            <label for="outWmm">Width (mm)</label>
+                            <input type="number" id="outWmm" min="0" step="0.01" placeholder="e.g., 210" />
+                        </div>
+                        <div>
+                            <label for="outHmm">Height (mm)</label>
+                            <input type="number" id="outHmm" min="0" step="0.01" placeholder="e.g., 297" />
+                        </div>
+                    </div>
+                    <div class="inline" style="margin-top:10px">
+                        <input type="checkbox" id="lockAspect" />
+                        <label for="lockAspect" style="margin:0">Lock image aspect ratio when editing mm</label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Resolution -->
+            <section class="card span-4" id="ppiCard">
+                <h2>3) Resolution</h2>
+                <label for="preset">Preset</label>
+                <select id="preset">
+                    <option value="72">Digital – Legacy 72 PPI</option>
+                    <option value="96" selected>Digital – 96 PPI</option>
+                    <option value="150">Print – 150 PPI (draft)</option>
+                    <option value="300">Print – 300 PPI (standard)</option>
+                    <option value="600">Print – 600 PPI (high)</option>
+                    <option value="custom">Custom…</option>
+                </select>
+                <div class="row" style="margin-top:10px">
+                    <div>
+                        <label for="ppi">PPI (px / inch)</label>
+                        <input type="number" id="ppi" min="1" step="1" value="96" />
+                    </div>
+                    <div>
+                        <label for="ppmm">PPMM (px / mm)</label>
+                        <input type="number" id="ppmm" min="0.01" step="0.01" value="3.78" />
+                    </div>
+                </div>
+                <p class="small">PPMM is derived from PPI via <span class="mono">PPMM = PPI / 25.4</span>. Editable fields stay in sync.</p>
+            </section>
+
+            <!-- KPIs / Results -->
+            <section class="card span-12" id="resultsCard">
+                <h2>Results</h2>
+                <div class="kpi" style="margin-top:6px">
+                    <div class="item">
+                        <h3>Required pixels for output</h3>
+                        <div class="val mono" id="reqPx">— × — px</div>
+                        <div class="info" id="reqPxHelp">at selected PPI</div>
+                    </div>
+                    <div class="item">
+                        <h3>Actual PPI @ chosen size</h3>
+                        <div class="val mono" id="actualPpi">— PPI</div>
+                        <div class="inifo" id="actualPpiHelp">from image pixels vs output mm</div>
+                    </div>
+                    <div class="item">
+                        <h3>Max output size @ PPI</h3>
+                        <div class="val mono" id="maxSize">— × — mm</div>
+                        <div class="info" id="maxSizeHelp">from image pixels</div>
+                    </div>
+                    <div class="item">
+                        <h3>Scale factor</h3>
+                        <div class="val mono" id="scale">—</div>
+                        <div class="info" id="scaleHelp">up/downscale relative to requirement</div>
+                    </div>
+                </div>
+                <div class="inline" style="margin-top:14px; gap:12px">
+                    <span class="badge" id="fitBadge">Enter values to evaluate fitness</span>
+                    <span class="badge" id="ratioBadge">Output ratio: <span class="ratio" id="outRatio">—</span></span>
+                </div>
+                <details>
+                    <summary class="help">How calculations work</summary>
+                    <ul class="help">
+                        <li><span class="mono">PPMM = PPI / 25.4</span></li>
+                        <li>Required pixels = <span class="mono">mm × PPI / 25.4</span></li>
+                        <li>Actual PPI at chosen size = <span class="mono">image_px ÷ (mm / 25.4)</span></li>
+                        <li>Max output size at PPI = <span class="mono">image_px × 25.4 ÷ PPI</span> (in mm)</li>
+                    </ul>
+                </details>
+            </section>
+        </div>
+
+        <div class="footer">Pro tip: choose a paper preset, then tweak the PPI. The indicators will tell you if your image is sufficient for print or digital.</div>
+    </div>
+
+    <script>
+        (function () {
+            const $ = sel => document.querySelector(sel);
+            const imgW = $('#imgW');
+            const imgH = $('#imgH');
+            const imgWmm = $('#imgWmm');
+            const imgHmm = $('#imgHmm');
+            const imgKnownPpi = $('#imgKnownPpi');
+            const derivePxBtn = $('#derivePxBtn');
+            const aspect = $('#aspect');
+
+            const modePaper = $('#modePaper');
+            const modeManual = $('#modeManual');
+            const paperPane = $('#paperPane');
+            const manualPane = $('#manualPane');
+            const paper = $('#paper');
+            const oriPortrait = $('#oriPortrait');
+            const oriLandscape = $('#oriLandscape');
+            const outWmm = $('#outWmm');
+            const outHmm = $('#outHmm');
+            const lockAspect = $('#lockAspect');
+
+            const preset = $('#preset');
+            const ppiInput = $('#ppi');
+            const ppmmInput = $('#ppmm');
+
+            const reqPx = $('#reqPx');
+            const reqPxHelp = $('#reqPxHelp');
+            const actualPpi = $('#actualPpi');
+            const actualPpiHelp = $('#actualPpiHelp');
+            const maxSize = $('#maxSize');
+            const maxSizeHelp = $('#maxSizeHelp');
+            const scaleEl = $('#scale');
+            const scaleHelp = $('#scaleHelp');
+            const fitBadge = $('#fitBadge');
+            const outRatio = $('#outRatio');
+            const ratioBadge = $('#ratioBadge');
+
+            const resetBtn = $('#resetBtn');
+            const copyLinkBtn = $('#copyLinkBtn');
+
+            // Paper sizes in MILLIMETERS
+            const PAPER_SIZES_MM = [
+                { id: 'A0', w: 841, h: 1189 },
+                { id: 'A1', w: 594, h: 841 },
+                { id: 'A2', w: 420, h: 594 },
+                { id: 'A3', w: 297, h: 420 },
+                { id: 'A4', w: 210, h: 297 },
+                { id: 'A5', w: 148, h: 210 },
+                { id: 'A6', w: 105, h: 148 },
+                { id: 'Letter', w: 215.9, h: 279.4 },
+                { id: 'Legal', w: 215.9, h: 355.6 },
+                { id: 'Tabloid', w: 279.4, h: 431.8 },
+                { id: 'Ledger', w: 431.8, h: 279.4 }
+            ];
+
+            function number(v) {
+                const x = parseFloat(v);
+                return Number.isFinite(x) ? x : 0;
+            }
+            function round(v, d = 2) {
+                return Number.isFinite(v) ? (Math.round(v * Math.pow(10, d)) / Math.pow(10, d)) : 0;
+            }
+            function gcd(a, b) {
+                a = Math.round(a); b = Math.round(b);
+                if (!a || !b) return 1;
+                while (b) { const t = b; b = a % b; a = t; }
+                return Math.abs(a);
+            }
+            function ratioText(w, h) {
+                if (!w || !h) return '—';
+                const g = gcd(w, h);
+                const rw = Math.round(w / g);
+                const rh = Math.round(h / g);
+                return `${rw}:${rh}`;
+            }
+
+            // Conversions
+            function ppiToPpmm(ppi) { return ppi / 25.4; }
+            function ppmmToPpi(ppmm) { return ppmm * 25.4; }
+
+            function getPPI() {
+                let ppi = number(ppiInput.value);
+                return ppi > 0 ? ppi : 0;
+            }
+            function setPPI(ppi) {
+                ppiInput.value = Math.max(1, Math.round(ppi));
+                ppmmInput.value = round(ppiToPpmm(getPPI()), 2);
+            }
+            function setPPMM(ppmm) {
+                ppmmInput.value = round(ppmm, 2);
+                ppiInput.value = Math.max(1, Math.round(ppmmToPpi(number(ppmmInput.value))));
+            }
+
+            function currentOutputMm() {
+                let w, h;
+                if (modePaper.classList.contains('active')) {
+                    const item = PAPER_SIZES_MM.find(x => x.id === paper.value);
+                    if (item) { w = item.w; h = item.h; }
+                } else {
+                    w = number(outWmm.value); h = number(outHmm.value);
+                }
+                if (oriLandscape.classList.contains('active')) {
+                    const t = w; w = h; h = t;
+                }
+                return { w, h };
+            }
+
+            function updatePaperSelect() {
+                paper.innerHTML = PAPER_SIZES_MM.map(p => {
+                    const txt = `${p.id} — ${p.w} × ${p.h} mm`;
+                    return `<option value="${p.id}">${txt}</option>`;
+                }).join('');
+                paper.value = 'A4';
+            }
+
+            function updateAspect() {
+                const w = number(imgW.value), h = number(imgH.value);
+                aspect.textContent = w && h ? `${ratioText(w, h)}  (${round(w / h, 3)}:1)` : '—';
+            }
+
+            function updateOutputs() {
+                // keep PPI & PPMM synced
+                ppmmInput.value = round(ppiToPpmm(getPPI()), 2);
+
+                const ppi = getPPI();
+                const ppmm = ppiToPpmm(ppi);
+
+                const imgPxW = number(imgW.value);
+                const imgPxH = number(imgH.value);
+
+                const { w: outMmW, h: outMmH } = currentOutputMm();
+
+                // Required pixels for output
+                const reqW = outMmW * ppmm; // mm × px/mm
+                const reqH = outMmH * ppmm;
+                reqPx.textContent = (outMmW && outMmH && ppi) ? `${Math.ceil(reqW)} × ${Math.ceil(reqH)} px` : '— × — px';
+                reqPxHelp.textContent = ppi ? `at ${ppi} PPI (${round(ppmm, 2)} px/mm)` : 'set a PPI';
+
+                // Actual PPI with current image at chosen size
+                let actPpiW = imgPxW && outMmW ? imgPxW / (outMmW / 25.4) : 0;
+                let actPpiH = imgPxH && outMmH ? imgPxH / (outMmH / 25.4) : 0;
+                const limitingPpi = Math.min(actPpiW || Infinity, actPpiH || Infinity);
+                actualPpi.textContent = (imgPxW && imgPxH && outMmW && outMmH) ? `${Math.floor(limitingPpi)} PPI` : '— PPI';
+                actualPpiHelp.textContent = (imgPxW && imgPxH) ? `Width: ${Math.floor(actPpiW)} • Height: ${Math.floor(actPpiH)} PPI` : 'enter image pixels';
+
+                // Max output size at the selected PPI (in mm)
+                const maxMmW = imgPxW && ppi ? (imgPxW * 25.4) / ppi : 0;
+                const maxMmH = imgPxH && ppi ? (imgPxH * 25.4) / ppi : 0;
+                maxSize.textContent = (imgPxW && imgPxH && ppi) ? `${round(maxMmW, 2)} × ${round(maxMmH, 2)} mm` : '— × — mm';
+                maxSizeHelp.textContent = (imgPxW && imgPxH && ppi) ? `at ${ppi} PPI` : 'add image px + PPI';
+
+                // Scale factor required to reach the required pixels
+                const scaleW = imgPxW && reqW ? imgPxW / reqW : 0;
+                const scaleH = imgPxH && reqH ? imgPxH / reqH : 0;
+                const limitingScale = Math.min(scaleW || Infinity, scaleH || Infinity);
+                let scaleText = '—';
+                if (isFinite(limitingScale) && limitingScale) {
+                    scaleText = (limitingScale >= 1)
+                        ? `${round(100 * limitingScale, 1)}% (downscale ok)`
+                        : `${round(100 * limitingScale, 1)}% (needs upscaling)`;
+                }
+                scaleEl.textContent = scaleText;
+                scaleHelp.textContent = (imgPxW && imgPxH && outMmW && outMmH && ppi)
+                    ? `Width scale ${round(100 * scaleW, 1)}% • Height scale ${round(100 * scaleH, 1)}%`
+                    : 'add inputs to compute scale';
+
+                // Fitness badge
+                if (!(imgPxW && imgPxH && outMmW && outMmH && ppi)) {
+                    fitBadge.textContent = 'Enter values to evaluate fitness';
+                    fitBadge.classList.remove('ok', 'warn');
+                } else if (limitingPpi >= ppi) {
+                    fitBadge.textContent = `✓ Image meets or exceeds ${ppi} PPI at ${outMmW}×${outMmH} mm`;
+                    fitBadge.classList.add('ok');
+                    fitBadge.classList.remove('warn');
+                } else {
+                    fitBadge.textContent = `⚠ Only ${Math.floor(limitingPpi)} PPI at chosen size; needs upscaling or smaller output`;
+                    fitBadge.classList.add('warn');
+                    fitBadge.classList.remove('ok');
+                }
+
+                // Output ratio
+                outRatio.textContent = ratioText(outMmW, outMmH) + (outMmW && outMmH ? `  (${round(outMmW / outMmH, 3)}:1)` : '');
+            }
+
+            function toggleMode(manual) {
+                if (manual) {
+                    modePaper.classList.remove('active');
+                    modeManual.classList.add('active');
+                    paperPane.style.display = 'none';
+                    manualPane.style.display = 'block';
+                } else {
+                    modeManual.classList.remove('active');
+                    modePaper.classList.add('active');
+                    manualPane.style.display = 'none';
+                    paperPane.style.display = 'block';
+                }
+                updateOutputs();
+            }
+
+            function setOrientation(portrait) {
+                if (portrait) {
+                    oriPortrait.classList.add('active');
+                    oriLandscape.classList.remove('active');
+                } else {
+                    oriLandscape.classList.add('active');
+                    oriPortrait.classList.remove('active');
+                }
+                updateOutputs();
+            }
+
+            function syncPresetToInputs() {
+                const val = preset.value;
+                if (val === 'custom') { return; }
+                setPPI(Number(val));
+                updateOutputs();
+            }
+
+            function onPpiEdited() {
+                preset.value = 'custom';
+                setPPI(number(ppiInput.value));
+                updateOutputs();
+            }
+            function onPpmmEdited() {
+                preset.value = 'custom';
+                setPPMM(number(ppmmInput.value));
+                updateOutputs();
+            }
+
+            function derivePixels() {
+                const wmm = number(imgWmm.value), hmm = number(imgHmm.value), ppi = number(imgKnownPpi.value);
+                if (!(wmm && hmm && ppi)) return;
+                const ppmm = ppiToPpmm(ppi);
+                imgW.value = Math.round(wmm * ppmm);
+                imgH.value = Math.round(hmm * ppmm);
+                updateAspect();
+                updateOutputs();
+            }
+
+            function bindManualAspectLock() {
+                outWmm.addEventListener('input', () => {
+                    if (!lockAspect.checked) { updateOutputs(); return; }
+                    const iw = number(imgW.value), ih = number(imgH.value);
+                    if (!(iw && ih)) { updateOutputs(); return; }
+                    const ratio = ih / iw; // h per w
+                    outHmm.value = round(number(outWmm.value) * ratio, 3);
+                    updateOutputs();
+                });
+                outHmm.addEventListener('input', () => {
+                    if (!lockAspect.checked) { updateOutputs(); return; }
+                    const iw = number(imgW.value), ih = number(imgH.value);
+                    if (!(iw && ih)) { updateOutputs(); return; }
+                    const ratio = iw / ih; // w per h
+                    outWmm.value = round(number(outHmm.value) * ratio, 3);
+                    updateOutputs();
+                });
+            }
+
+            function readStateFromHash() {
+                try {
+                    if (!location.hash) return;
+                    const raw = decodeURIComponent(location.hash.slice(1));
+                    const state = JSON.parse(atob(raw));
+                    for (const [k, v] of Object.entries(state)) {
+                        const el = document.getElementById(k);
+                        if (!el) continue;
+                        if (el.tagName === 'INPUT' && el.type === 'checkbox') el.checked = !!v; else el.value = v;
+                    }
+                    // restore toggles
+                    toggleMode(state.__manual === '1');
+                    setOrientation(state.__portrait !== '0');
+                    updateOutputs();
+                    updateAspect();
+                } catch (e) { console.warn('Bad state in URL hash'); }
+            }
+
+            function copyStateToClipboard() {
+                const state = {
+                    imgW: imgW.value, imgH: imgH.value,
+                    outWmm: outWmm.value, outHmm: outHmm.value,
+                    ppi: ppiInput.value, ppmm: ppmmInput.value,
+                    preset: preset.value,
+                    paper: paper.value,
+                    lockAspect: lockAspect.checked ? '1' : '0',
+                    __manual: modeManual.classList.contains('active') ? '1' : '0',
+                    __portrait: oriPortrait.classList.contains('active') ? '1' : '0',
+                };
+                const token = btoa(JSON.stringify(state));
+                const url = location.origin + location.pathname + '#' + encodeURIComponent(token);
+                navigator.clipboard.writeText(url).then(() => {
+                    copyLinkBtn.textContent = 'Copied!';
+                    setTimeout(() => copyLinkBtn.textContent = 'Share State', 1200);
+                });
+            }
+
+            function resetAll() {
+                imgW.value = '';
+                imgH.value = '';
+                imgWmm.value = '';
+                imgHmm.value = '';
+                imgKnownPpi.value = '';
+
+                outWmm.value = '';
+                outHmm.value = '';
+                lockAspect.checked = false;
+
+                preset.value = '96';
+                setPPI(96);
+                paper.value = 'A4';
+                toggleMode(false);
+                setOrientation(true);
+                updateAspect();
+                updateOutputs();
+            }
+
+            function wire() {
+                updatePaperSelect();
+                setPPI(96);
+                updateOutputs();
+
+                // Event bindings
+                imgW.addEventListener('input', () => { updateAspect(); updateOutputs(); });
+                imgH.addEventListener('input', () => { updateAspect(); updateOutputs(); });
+
+                derivePxBtn.addEventListener('click', derivePixels);
+
+                modePaper.addEventListener('click', () => toggleMode(false));
+                modeManual.addEventListener('click', () => toggleMode(true));
+
+                oriPortrait.addEventListener('click', () => setOrientation(true));
+                oriLandscape.addEventListener('click', () => setOrientation(false));
+
+                paper.addEventListener('change', updateOutputs);
+
+                outWmm.addEventListener('input', updateOutputs);
+                outHmm.addEventListener('input', updateOutputs);
+                bindManualAspectLock();
+
+                preset.addEventListener('change', syncPresetToInputs);
+                ppiInput.addEventListener('input', onPpiEdited);
+                ppmmInput.addEventListener('input', onPpmmEdited);
+
+                resetBtn.addEventListener('click', resetAll);
+                copyLinkBtn.addEventListener('click', copyStateToClipboard);
+
+                readStateFromHash();
+            }
+
+            wire();
+        })();
+    </script>
+</body>
+</html>
