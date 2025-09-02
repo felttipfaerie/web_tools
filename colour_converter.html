@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>True Color ⇄ HEX ⇄ CMYK Converter</title>
+  <title>AutoCAD True Color (RGB) ⇄ HEX ⇄ CMYK Converter | Free Online Color Converter</title>
   <style>
     :root {
       --bg: #020202;
@@ -64,7 +64,7 @@
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
     .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px }
     .row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
     .btn { background: var(--blue); color: var(--bg); border: 1px solid var(--white); border-radius: 14px; padding: 10px 14px; font-weight: 700; cursor: pointer }
     .btn.secondary { background: var(--bg); color: var(--white); border: 1px solid var(--white); }
     .footer { margin-top: 20px; color: var(--muted); font-size: 12px }
@@ -76,19 +76,19 @@
   <div class="wrap">
     <header>
       <div>
-        <h1>True Color ⇄ HEX ⇄ CMYK</h1>
-        <div class="tagline">Enter any one format — the others update instantly. Styled to match your DPI/DPMM tool.</div>
+        <h1>AutoCAD True Color ⇄ RGB ⇄ HEX ⇄ CMYK Converter</h1>
+        <div class="tagline">Convert RGB (AutoCAD True Color), HEX, and CMYK instantly. Aaccurate, fast, and perfect for print or CAD workflows.</div>
       </div>
       <div class="actions">
-        <button class="btn" id="resetBtn" title="Reset all fields">Reset</button>
-        <button class="btn secondary" id="copyLinkBtn" title="Copy a sharable URL with your current inputs">Share State</button>
+        <button class="btn" id="resetBtn" title="Reset all color fields to defaults">Reset Values</button>
+        <button class="btn secondary" id="copyLinkBtn" title="Copy a shareable URL for your current color values">Copy Shareable Link</button>
       </div>
     </header>
 
     <div class="grid">
       <!-- Row 1: RGB + CMYK -->
       <section class="card span-6">
-        <h2>AutoCAD True Color (0–255)</h2>
+        <h2>AutoCAD RGB (True Color, 0–255)</h2>
         <div class="row-3">
           <div>
             <label for="r">Red</label>
@@ -103,11 +103,11 @@
             <input id="b" type="number" min="0" max="255" step="1" value="196" />
           </div>
         </div>
-        <p class="small">Same RGB channels used by AutoCAD "True Color".</p>
+        <p class="small">Uses the same RGB channel range as AutoCAD “True Color”.</p>
       </section>
 
       <section class="card span-6">
-        <h2>CMYK (0–100)</h2>
+        <h2>CMYK (0–100) Converter</h2>
         <div class="row-4">
           <div>
             <label for="c">Cyan</label>
@@ -126,24 +126,24 @@
             <input id="k" type="number" min="0" max="100" step="0.1" value="2.7" />
           </div>
         </div>
-        <p class="small">Note: CMYK is device/press dependent; values here use the standard sRGB-derived formula.</p>
+        <p class="small">CMYK values are device-dependent; this tool uses a standard sRGB-based conversion formula.</p>
       </section>
 
       <!-- Row 2: HEX + Preview -->
       <section class="card span-6">
-        <h2>HEX</h2>
-        <label for="hex">#RRGGBB or #RGB</label>
+        <h2>HEX Color Code</h2>
+        <label for="hex">Enter #RRGGBB or #RGB</label>
         <input id="hex" type="text" class="hex-box" placeholder="#F85CC4" value="#F85CC4" />
         <p class="small" id="hexMsg"></p>
       </section>
 
       <section class="card span-6">
-        <h2>Preview</h2>
-        <div id="swatch" class="swatch" role="img" aria-label="Color preview">&nbsp;</div>
+        <h2>Live Color Preview</h2>
+        <div id="swatch" class="swatch" role="img" aria-label="Live color preview swatch">&nbsp;</div>
       </section>
     </div>
 
-    <div class="footer">Pro tip: paste any HEX (like <span class="mono">#09F</span>) or tweak a single channel — all fields sync.</div>
+    <div class="footer">Tip: Paste any HEX (e.g., <span class="mono">#09F</span>) or adjust a channel — RGB, HEX, and CMYK stay perfectly in sync.</div>
   </div>
 
   <script>
@@ -192,7 +192,7 @@
         swatch.style.background=`rgb(${r},${g},${b})`;
         syncing=false;
       }
-      function setHEX(hex){ if(syncing) return; const rgb=hexToRgb(hex); if(!rgb){ hexMsg.textContent='Invalid HEX'; return;} hexMsg.textContent=''; setRGB(rgb.r,rgb.g,rgb.b); }
+      function setHEX(hex){ if(syncing) return; const rgb=hexToRgb(hex); if(!rgb){ hexMsg.textContent='Invalid HEX code'; return;} hexMsg.textContent=''; setRGB(rgb.r,rgb.g,rgb.b); }
       function setCMYK(c,m,y,k){ if(syncing) return; const {r,g,b}=cmykToRgb(clamp(c,0,100),clamp(m,0,100),clamp(y,0,100),clamp(k,0,100)); setRGB(r,g,b); }
 
       [rEl,gEl,bEl].forEach(el=>el.addEventListener('input',()=>setRGB(+rEl.value,+gEl.value,+bEl.value)));
@@ -203,7 +203,7 @@
         const state={ r:rEl.value,g:gEl.value,b:bEl.value,hex:hexEl.value,c:cEl.value,m:mEl.value,y:yEl.value,k:kEl.value };
         const token=btoa(JSON.stringify(state));
         const url=location.origin+location.pathname+'#'+encodeURIComponent(token);
-        navigator.clipboard.writeText(url).then(()=>{ const old=copyLinkBtn.textContent; copyLinkBtn.textContent='Copied!'; setTimeout(()=>copyLinkBtn.textContent=old,1000); });
+        navigator.clipboard.writeText(url).then(()=>{ const old=copyLinkBtn.textContent; copyLinkBtn.textContent='Link Copied!'; setTimeout(()=>copyLinkBtn.textContent=old,1000); });
       }
       copyLinkBtn.addEventListener('click',shareState);
 
